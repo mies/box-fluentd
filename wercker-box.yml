@@ -1,0 +1,22 @@
+name: fluentd
+version: 0.0.1
+inherits: wercker/ubuntu12.04-ruby2.0.0
+type: service
+platform: ubuntu@12.04
+description: box with fluentd an open source log management tool
+keywords:
+  - fluentd
+  - logging
+  - opensource
+  - json
+  - ruby
+packages:
+  - fluentd@0.10.35
+script: |
+  echo -e 'root soft nofile 65536\nroot hard nofile 65536\n* soft nofile 65536\n* hard nofile 65536\n' > /etc/security/limits.conf
+  echo -e 'net.ipv4.tcp_tw_recycle = 1\nnet.ipv4.tcp_tw_reuse = 1\nnet.ipv4.ip_local_port_range = 10240    65535' > /etc/sysctl.conf
+  sysctl -w
+  curl -L http://toolbelt.treasure-data.com/sh/install-ubuntu-precise.sh | sh
+  /etc/init.d/td-agent status
+
+  
